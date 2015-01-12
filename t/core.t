@@ -31,6 +31,20 @@ subtest 'fake_array' => sub {
 
     my $got = fake_array( 0, "Larry" )->();
     cmp_deeply( $got, [], "generated array of size 0 is empty" );
+
+    $got = fake_array( 2, { first => 1 } )->();
+    cmp_deeply(
+        $got,
+        [ { first => 1 }, { first => 1 } ],
+        "generated array with constant hash structure"
+    );
+
+    $got = fake_array( 2, { name => fake_choice(qw/Larry Damian Randall/) } )->();
+    cmp_deeply(
+        $got,
+        [ { name => $re }, { name => $re } ],
+        "generated array with dynamic hash structure"
+    );
 };
 
 subtest 'fake_var_array' => sub {
