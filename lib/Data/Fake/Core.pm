@@ -12,21 +12,69 @@ use Exporter 5.57 qw/import/;
 our @EXPORT = qw(
   fake_hash
   fake_array
+  fake_var_array
   fake_choice
 );
 
 sub fake_hash {
-    my ($arg) = @_;
+    my ($template) = @_;
+    return sub { _transform($template) };
 }
 
 sub fake_array {
-    my ($arg) = @_;
+    my ( $size, $template ) = @_;
+    return sub {
+        [ map { _transform($template) } 1 .. $size ];
+    };
+}
+
+sub fake_var_array {
+    my ( $min, $max, $template ) = @_;
+    return sub {
+        my $length = int( rand( $max - $min + 1 ) );
+        return [] if $length == 0;
+        return [ map { _transform($template) } $min .. $min + $length - 1 ];
+    };
 }
 
 sub fake_choice {
     my (@list) = @_;
     my $size = scalar @list;
     return sub { $list[ int( rand($size) ) ] };
+}
+
+sub _transform {
+    my ($template) = @_;
+
+    my $type = ref($template);
+
+    if ( $type eq 'CODE' ) {
+        return $template->();
+    }
+    elsif ( $type eq 'HASH' ) {
+        my $copy = {};
+        while ( my ( $k, $v ) = each %$template ) {
+            $copy->{$k} =
+                ref($v) eq 'CODE'  ? $v->()
+              : ref($v) eq 'HASH'  ? _transform($v)
+              : ref($v) eq 'ARRAY' ? _transform($v)
+              :                      $v;
+        }
+        return $copy;
+    }
+    elsif ( $type eq 'ARRAY' ) {
+        my @copy = map {
+                ref $_ eq 'CODE'  ? $_->()
+              : ref $_ eq 'HASH'  ? _transform($_)
+              : ref $_ eq 'ARRAY' ? _transform($_)
+              :                     $_;
+        } @$template;
+        return \@copy;
+    }
+    else {
+        # literal value
+        return $template;
+    }
 }
 
 1;
