@@ -28,9 +28,9 @@ sub import {
     my $hero_factory = fake_hash(
         {
             name      => fake_name(),
-            battlecry => fake_sentence(),
-            birthday  => fake_date("%Y-%m-%d"),
-            friends   => fake_array( 3, 6, fake_name() ),
+            battlecry => fake_sentences(1),
+            birthday  => fake_past_date("%Y-%m-%d"),
+            friends   => fake_var_array( 3, 6, fake_name() ),
             gender    => fake_choice(qw/Male Female Other/),
         }
     );
