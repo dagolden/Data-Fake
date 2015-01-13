@@ -31,9 +31,10 @@ sub fake_array {
 sub fake_var_array {
     my ( $min, $max, $template ) = @_;
     return sub {
-        my $length = int( rand( $max - $min + 1 ) );
+        my $length = $min + int( rand( $max - $min + 1 ) );
         return [] if $length == 0;
-        return [ map { _transform($template) } $min .. $min + $length - 1 ];
+        my $last = $min + $length - 1;
+        return [ map { _transform($template) } $min .. $last ];
     };
 }
 

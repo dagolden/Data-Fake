@@ -51,15 +51,20 @@ subtest 'fake_var_array' => sub {
     my $re = qr/^(?:Larry|Damian|Randall)/;
 
     for my $max_size ( 3 .. 4 ) {
-        my $factory = fake_var_array( 0, $max_size, fake_choice(qw/Larry Damian Randall/) );
+        for my $min_size ( 0 .. 2 ) {
+            my $factory =
+              fake_var_array( $min_size, $max_size, fake_choice(qw/Larry Damian Randall/) );
 
-        for my $i ( 1 .. 10 ) {
-            my $got    = $factory->();
-            my $length = @$got;
-            ok( $length >= 0 && $length <= $max_size,
-                "var array size $length between 0 and $max_size" );
-            for my $item (@$got) {
-                like( $item, $re, "element value correct" );
+            for my $i ( 1 .. 10 ) {
+                my $got    = $factory->();
+                my $length = @$got;
+                ok(
+                    $length >= $min_size && $length <= $max_size,
+                    "var array size $length between $min_size and $max_size"
+                );
+                for my $item (@$got) {
+                    like( $item, $re, "element value correct" );
+                }
             }
         }
     }
