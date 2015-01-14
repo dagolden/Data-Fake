@@ -14,10 +14,17 @@ subtest 'fake_name' => sub {
     }
 };
 
-subtest 'fake_title' => sub {
+subtest 'fake_surname' => sub {
     for my $i ( 0 .. 5 ) {
-        my $got = fake_title->();
-        ok( defined($got), "title ($got) is defined" );
+        my $got = fake_surname->();
+        ok( defined($got), "surname ($got) is defined" );
+    }
+};
+
+subtest 'fake_first_name' => sub {
+    for my $i ( 0 .. 5 ) {
+        my $got = fake_first_name->();
+        ok( defined($got), "first name ($got) is defined" );
     }
 };
 
