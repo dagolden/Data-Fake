@@ -12,6 +12,13 @@ subtest 'fake_title' => sub {
     }
 };
 
+subtest 'fake_company' => sub {
+    for my $i ( 0 .. 5 ) {
+        my $got = fake_company->();
+        ok( defined($got), "company ($got) is defined" );
+    }
+};
+
 done_testing;
 # COPYRIGHT
 

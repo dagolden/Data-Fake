@@ -14,16 +14,27 @@ our @EXPORT = qw(
   fake_title
 );
 
-my ( @job_titles );
-my ( $job_title_count );
+use Data::Fake::Names ();
 
-sub _job_title    { return $job_titles[ int( rand($job_title_count) ) ] }
+my ( @job_titles,     $job_title_count );
+my ( @company_suffix, $company_suffix_count );
+
+sub _job_title      { return $job_titles[ int( rand($job_title_count) ) ] }
+sub _company_suffix { return $company_suffix[ int( rand($company_suffix_count) ) ] }
 
 sub fake_company {
+    my $fake_surname = Data::Fake::Names::fake_surname();
     return sub {
-        my $is_male = ( rand() < 0.5 );
-        my @first = map { $is_male ? _male_first() : _female_first() } 1 .. 2;
-        return join( " ", @first, _surname() );
+        my $format = int( rand(3) );
+        if ( $format == 0 ) {
+            return sprintf( "%s, %s", $fake_surname->(), _company_suffix );
+        }
+        elsif ( $format == 1 ) {
+            return sprintf( "%s-%s", map { $fake_surname->() } 1 .. 2 );
+        }
+        elsif ( $format == 2 ) {
+            return sprintf( "%s, %s and %s", map { $fake_surname->() } 1 .. 3 );
+        }
     };
 }
 
@@ -128,10 +139,10 @@ sub fake_title {
     'Senior Financial Analyst',
 );
 
-$male_count      = @male_first;
-$female_count    = @female_first;
-$surname_count   = @surnames;
-$job_title_count = @job_titles;
+@company_suffix = qw( Inc. Corp. LP LLP LLC );
+
+$job_title_count      = @job_titles;
+$company_suffix_count = @company_suffix;
 
 =for Pod::Coverage BUILD
 
