@@ -20,6 +20,14 @@ subtest 'fake_domain' => sub {
     }
 };
 
+subtest 'fake_email' => sub {
+    for my $i ( 0 .. 5 ) {
+        my $got = fake_email->();
+        ok( defined($got), "email ($got) is defined" );
+        like( $got, qr/^\w+\.\w+\@\w+\.\w+/, "email has expected form" );
+    }
+};
+
 done_testing;
 # COPYRIGHT
 

@@ -12,9 +12,11 @@ use Exporter 5.57 qw/import/;
 our @EXPORT = qw(
   fake_tld
   fake_domain
+  fake_email
 );
 
-use Data::Fake::Text ();
+use Data::Fake::Text  ();
+use Data::Fake::Names ();
 
 my ( @domain_suffixes, $domain_suffix_count );
 
@@ -31,6 +33,15 @@ sub fake_domain {
         $prefix =~ s/\s//g;
         join( ".", $prefix, _domain_suffix );
     };
+}
+
+sub fake_email {
+    my $fn = Data::Fake::Names::fake_first_name;
+    my $ln = Data::Fake::Names::fake_surname;
+    my $dn = fake_domain;
+    return sub {
+        return sprintf( "%s.%s@%s", map { lc } map { $_->() } $fn, $ln, $dn );
+      }
 }
 
 # list and frequencey of most common domains suffixes taken from moz.org
