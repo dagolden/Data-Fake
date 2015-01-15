@@ -16,9 +16,53 @@ our @EXPORT = qw(
   fake_choice
 );
 
+use Carp qw/croak/;
+
+=func fake_hash
+
+    $hash_factory = fake_hash(
+        {
+            name => fake_name,
+            pet => fake_choice(qw/dog cat frog/),
+        }
+    );
+
+    $hash_factory = fake_hash( @hash_or_hash_generators );
+
+The C<fake_hash> function returns a code reference that, when run,
+generates a hash reference.
+
+The simplest way to use it is to provide a hash reference with some values
+replaced with C<fake_*> generator functions.  When the generator runs, the
+hash will be walked recursively and any code reference found will be
+replaced with its output.
+
+If more than one argument is provided, when the generator runs, they will
+be merged according to the following rules:
+
+=for :list
+* code references will be replaced with their outputs
+* after replacement, if any arguments aren't hash references, an exception
+  will be thrown
+* hash references will be shallow-merged left-to-right
+
+This merging is a bit peculiar, but allows for generating hashes that might
+have missing or dynamic keys, using L</fake_maybe_hash> and
+L</fake_var_hash>.
+
+=cut
+
 sub fake_hash {
-    my ($template) = @_;
-    return sub { _transform($template) };
+    my (@parts) = @_;
+    return sub {
+        my $result = {};
+        for my $next ( map { _transform($_) } @parts ) {
+            croak "fake_hash can only merge hash references"
+              unless ref($next) eq 'HASH';
+            @{$result}{ keys %$next } = @{$next}{ keys %$next };
+        }
+        return $result;
+    };
 }
 
 sub fake_array {

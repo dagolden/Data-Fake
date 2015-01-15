@@ -80,6 +80,7 @@ subtest 'fake_hash' => sub {
                     work => fake_choice( "666-1234", "666-7777" ),
                 }
             ),
+            color => 'blue',
         }
     );
 
@@ -89,6 +90,7 @@ subtest 'fake_hash' => sub {
             home => re(qr/^555/),
             work => re(qr/^666/),
         },
+        color => 'blue',
     };
 
     for my $i ( 1 .. 5 ) {
@@ -96,6 +98,20 @@ subtest 'fake_hash' => sub {
         cmp_deeply( $got, $expected, "generated hash $i" );
     }
 
+    $factory = fake_hash(
+        { name => fake_choice(qw/Larry Damian Randall/) },
+        fake_hash(
+            {
+                phone => {
+                    home => fake_choice( "555-1212", "555-1234" ),
+                    work => fake_choice( "666-1234", "666-7777" ),
+                },
+            }
+        ),
+        { color => 'blue' },
+    );
+
+    cmp_deeply( $factory->(), $expected, "generated hash from fragments" );
 };
 
 done_testing;
