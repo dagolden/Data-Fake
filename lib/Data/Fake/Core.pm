@@ -11,6 +11,7 @@ use Exporter 5.57 qw/import/;
 
 our @EXPORT = qw(
   fake_hash
+  fake_maybe_hash
   fake_array
   fake_var_array
   fake_choice
@@ -62,6 +63,45 @@ sub fake_hash {
             @{$result}{ keys %$next } = @{$next}{ keys %$next };
         }
         return $result;
+    };
+}
+
+=func fake_maybe_hash
+
+    $hash_factory = fake_maybe_hash(
+        0.90, # 90% likely
+        {
+            name => fake_name()
+        }
+    );
+
+The C<fake_maybe_hash> function takes a probability and a hash reference or
+hash reference generator.  The probability (between 0 and 1.0) indicates
+the likelihood that the return value will be a hash generated from the
+input.  The rest of the time, an empty hash reference will be returned.
+
+Use this function to help construct hashes that might be missing keys:
+
+    # 25% of the time, generate a hash with a 'spouse' key
+    $factory = fake_hash(
+        { ... },
+        fake_maybe_hash( 0.25, { spouse => fake_name } ),
+    );
+
+=cut
+
+sub fake_maybe_hash {
+    my ( $prob, $template ) = @_;
+    croak "fake_maybe_hash probability must be between 0 and 1.0"
+      unless defined($prob) && $prob >= 0 && $prob <= 1.0;
+    return sub {
+        if ( rand() <= $prob ) {
+            my $result = _transform($template);
+            croak "fake_maybe_hash input requires a hash reference as input"
+              unless ref($result) eq 'HASH';
+            return $result;
+        }
+        return {};
     };
 }
 
