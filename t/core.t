@@ -39,6 +39,19 @@ subtest 'fake_random_float' => sub {
     }
 };
 
+subtest 'fake_digits' => sub {
+    for ( 1 .. 3 ) {
+        my $got = fake_digits("###")->();
+        like( $got, qr/^\d+$/, "digit replacement ($got)" );
+    }
+
+    my $got = fake_digits('\####')->();
+    like( $got, qr/^#\d+$/, "digit replacement 1 ($got)" );
+
+    $got = fake_digits('###-\####-\####-###')->();
+    like( $got, qr/^\d{3}-#\d{3}-#\d{3}-\d{3}$/, "digit replacement 2 ($got)" );
+};
+
 subtest 'fake_array' => sub {
     my $re = re(qr/^(?:Larry|Damian|Randall)/);
 

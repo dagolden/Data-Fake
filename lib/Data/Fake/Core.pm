@@ -17,6 +17,7 @@ our @EXPORT = qw(
   fake_choice
   fake_random_int
   fake_random_float
+  fake_digits
 );
 
 use Carp qw/croak/;
@@ -165,6 +166,35 @@ sub fake_random_float {
     my $range = $max - $min;
     return sub {
         return $min + rand($range);
+    };
+}
+
+=func fake_digits
+
+    $digit_factory = fake_digits("###-####"); # "555-1234"
+    $digit_factory = fake_digits("\###");     # "#12"
+
+Given a text pattern, returns a generator that replaces all occurances of
+the sharp character (C<#>) with a randomly selected digit.  To have a
+literal sharp character, escape it with a backslash.
+
+Use this for phone numbers, currencies, or whatever else needs random
+digits:
+
+    fake_digits("###-##-####");     # US Social Security Number
+    fake_digits("(###) ###-####");  # (800) 555-1212
+
+=cut
+
+my $DIGIT_RE = qr/(?<!\\)#/;
+
+sub fake_digits {
+    my ($template) = @_;
+    return sub {
+        my $copy = $template;
+        1 while $copy =~ s{$DIGIT_RE}{int(rand(10))}e;
+        $copy =~ s{\\#}{#}g;
+        return $copy;
     };
 }
 
