@@ -15,6 +15,7 @@ our @EXPORT = qw(
   fake_array
   fake_var_array
   fake_choice
+  fake_random_int
 );
 
 use Carp qw/croak/;
@@ -126,6 +127,25 @@ sub fake_choice {
     my (@list) = @_;
     my $size = scalar @list;
     return sub { $list[ int( rand($size) ) ] };
+}
+
+=func fake_random_int
+
+    $rand_factory = fake_random_int(1, 6);
+
+Given a minimum and a maximum value as inputs, returns a generator that
+will produce a random integer in that range.
+
+=cut
+
+sub fake_random_int {
+    my ( $min, $max ) = map { int($_) } @_;
+    croak "fake_random_int requires minimum and maximum"
+      unless defined $min && defined $max;
+    my $range = $max - $min + 1;
+    return sub {
+        return $min + int( rand($range) );
+    };
 }
 
 sub _transform {

@@ -15,6 +15,18 @@ subtest 'fake_choice' => sub {
     }
 };
 
+subtest 'fake_random_int' => sub {
+    for my $min ( -1, 0 .. 2 ) {
+        for my $max ( 3, 5.1, 10 ) {
+            my $rand = fake_random_int( $min, $max );
+            for ( 1 .. 5 ) {
+                my $got = $rand->();
+                ok( $got >= $min && $got <= $max, "random ($got) in range ($min - $max)" );
+            }
+        }
+    }
+};
+
 subtest 'fake_array' => sub {
     my $re = re(qr/^(?:Larry|Damian|Randall)/);
 
@@ -126,7 +138,7 @@ subtest 'fake_maybe_hash' => sub {
     cmp_deeply( $result, { name => 'Joe' }, "maybe hash, likely" );
 
     $factory = fake_maybe_hash( 0.001, { name => 'Joe' } );
-    my $result;
+    $result = undef;
     for ( 1 .. 3 ) {
         my $temp = $factory->();
         if ( !keys %$temp ) {
