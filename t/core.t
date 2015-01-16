@@ -27,6 +27,18 @@ subtest 'fake_random_int' => sub {
     }
 };
 
+subtest 'fake_random_float' => sub {
+    for my $min ( -1.0, 0, 2.2 ) {
+        for my $max ( 3, 5.1, 9.9 ) {
+            my $rand = fake_random_float( $min, $max );
+            for ( 1 .. 5 ) {
+                my $got = $rand->();
+                ok( $got >= $min && $got <= $max, "random ($got) in range ($min - $max)" );
+            }
+        }
+    }
+};
+
 subtest 'fake_array' => sub {
     my $re = re(qr/^(?:Larry|Damian|Randall)/);
 
