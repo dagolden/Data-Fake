@@ -13,6 +13,14 @@ subtest 'fake_choice' => sub {
         my $got = $chooser->();
         ok( exists( $list{$got} ), "got key $got in list" );
     }
+
+    $chooser = fake_choice( fake_random_int( 10, 99 ), fake_random_float( 0, 1 ), );
+    for ( 1 .. 10 ) {
+        my $got = $chooser->();
+        my $re  = qr/^(?:0\.\d+|\d\d)$/;
+        like( $got, $re, "fake_choice evaluated options as expected" );
+    }
+
 };
 
 subtest 'fake_random_int' => sub {

@@ -126,10 +126,22 @@ sub fake_var_array {
     };
 }
 
+=func fake_choice
+
+    $generator = fake_choice( qw/one two three/ );
+    $generator = fake_choice( @generators );
+
+Given literal values or code references, returns a generator that randomly
+selects one of them.  If the choice is a code reference, it will be run; if
+the choice is a hash or array references, it will be recursively evaluated
+like C<fake_hash> or C<fake_array> would do.
+
+=cut
+
 sub fake_choice {
     my (@list) = @_;
     my $size = scalar @list;
-    return sub { $list[ int( rand($size) ) ] };
+    return sub { _transform( $list[ int( rand($size) ) ] ) };
 }
 
 =func fake_random_int
