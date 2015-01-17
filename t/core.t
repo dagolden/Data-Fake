@@ -14,7 +14,7 @@ subtest 'fake_choice' => sub {
         ok( exists( $list{$got} ), "got key $got in list" );
     }
 
-    $chooser = fake_choice( fake_random_int( 10, 99 ), fake_random_float( 0, 1 ), );
+    $chooser = fake_choice( fake_int( 10, 99 ), fake_float( 0, 1 ), );
     for ( 1 .. 10 ) {
         my $got = $chooser->();
         my $re  = qr/^(?:0\.\d+|\d\d)$/;
@@ -23,10 +23,10 @@ subtest 'fake_choice' => sub {
 
 };
 
-subtest 'fake_random_int' => sub {
+subtest 'fake_int' => sub {
     for my $min ( -1, 0 .. 2 ) {
         for my $max ( 3, 5.1, 10 ) {
-            my $rand = fake_random_int( $min, $max );
+            my $rand = fake_int( $min, $max );
             for ( 1 .. 5 ) {
                 my $got = $rand->();
                 ok( $got >= $min && $got <= $max, "random ($got) in range ($min - $max)" );
@@ -35,10 +35,10 @@ subtest 'fake_random_int' => sub {
     }
 };
 
-subtest 'fake_random_float' => sub {
+subtest 'fake_float' => sub {
     for my $min ( -1.0, 0, 2.2 ) {
         for my $max ( 3, 5.1, 9.9 ) {
-            my $rand = fake_random_float( $min, $max );
+            my $rand = fake_float( $min, $max );
             for ( 1 .. 5 ) {
                 my $got = $rand->();
                 ok( $got >= $min && $got <= $max, "random ($got) in range ($min - $max)" );
@@ -62,12 +62,12 @@ subtest 'fake_digits' => sub {
 
 subtest 'fake_template' => sub {
     for ( 1 .. 3 ) {
-        my $fcn = fake_template( "%s.%s.%s.%s", map { fake_random_int( 1, 254 ) } 1 .. 4 );
+        my $fcn = fake_template( "%s.%s.%s.%s", map { fake_int( 1, 254 ) } 1 .. 4 );
         my $got = $fcn->();
         like( $got, qr/^\d+\.\d+\.\d+\.\d+$/, "template replacement ($got)" );
     }
     for ( 1 .. 3 ) {
-        my $fcn = fake_template( '$%.2f', fake_random_float( 0, 10 ) );
+        my $fcn = fake_template( '$%.2f', fake_float( 0, 10 ) );
         my $got = $fcn->();
         like( $got, qr/^\$\d\.\d\d$/, "template replacement 2 ($got)" );
     }

@@ -16,8 +16,8 @@ our @EXPORT = qw(
   fake_var_array
   fake_choice
   fake_weighted
-  fake_random_int
-  fake_random_float
+  fake_int
+  fake_float
   fake_digits
   fake_template
 );
@@ -190,18 +190,18 @@ sub fake_weighted {
     };
 }
 
-=func fake_random_int
+=func fake_int
 
-    $rand_factory = fake_random_int(1, 6);
+    $rand_factory = fake_int(1, 6);
 
 Given a minimum and a maximum value as inputs, returns a generator that
 will produce a random integer in that range.
 
 =cut
 
-sub fake_random_int {
+sub fake_int {
     my ( $min, $max ) = map { int($_) } @_;
-    croak "fake_random_int requires minimum and maximum"
+    croak "fake_int requires minimum and maximum"
       unless defined $min && defined $max;
     my $range = $max - $min + 1;
     return sub {
@@ -209,18 +209,18 @@ sub fake_random_int {
     };
 }
 
-=func fake_random_float
+=func fake_float
 
-    $rand_factory = fake_random_float(1.0, 6.0);
+    $rand_factory = fake_float(1.0, 6.0);
 
 Given a minimum and a maximum value as inputs, returns a generator that
 will produce a random floating point value in that range.
 
 =cut
 
-sub fake_random_float {
+sub fake_float {
     my ( $min, $max ) = @_;
-    croak "fake_random_float requires minimum and maximum"
+    croak "fake_float requires minimum and maximum"
       unless defined $min && defined $max;
     my $range = $max - $min;
     return sub {
