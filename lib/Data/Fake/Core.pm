@@ -27,14 +27,14 @@ use List::Util qw/sum/;
 
 =func fake_hash
 
-    $hash_factory = fake_hash(
+    $generator = fake_hash(
         {
             name => fake_name,
             pet => fake_choice(qw/dog cat frog/),
         }
     );
 
-    $hash_factory = fake_hash( @hash_or_hash_generators );
+    $generator = fake_hash( @hash_or_hash_generators );
 
 The C<fake_hash> function returns a code reference that, when run,
 generates a hash reference.
@@ -74,7 +74,7 @@ sub fake_hash {
 
 =func fake_maybe_hash
 
-    $hash_factory = fake_maybe_hash(
+    $generator = fake_maybe_hash(
         0.90, # 90% likely
         {
             name => fake_name()
@@ -192,7 +192,7 @@ sub fake_weighted {
 
 =func fake_int
 
-    $rand_factory = fake_int(1, 6);
+    $generator = fake_int(1, 6);
 
 Given a minimum and a maximum value as inputs, returns a generator that
 will produce a random integer in that range.
@@ -211,7 +211,7 @@ sub fake_int {
 
 =func fake_float
 
-    $rand_factory = fake_float(1.0, 6.0);
+    $generator = fake_float(1.0, 6.0);
 
 Given a minimum and a maximum value as inputs, returns a generator that
 will produce a random floating point value in that range.
@@ -230,8 +230,8 @@ sub fake_float {
 
 =func fake_digits
 
-    $digit_factory = fake_digits("###-####"); # "555-1234"
-    $digit_factory = fake_digits("\###");     # "#12"
+    $generator = fake_digits("###-####"); # "555-1234"
+    $generator = fake_digits("\###");     # "#12"
 
 Given a text pattern, returns a generator that replaces all occurances of
 the sharp character (C<#>) with a randomly selected digit.  To have a
@@ -259,7 +259,7 @@ sub fake_digits {
 
 =func fake_template
 
-    $string_factory = fake_template("Hello, %s", fake_name());
+    $generator = fake_template("Hello, %s", fake_name());
 
 Given a sprintf-style text pattern and a list of generators, returns a
 generator that, when run, executes the generators and returns the string

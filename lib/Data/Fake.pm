@@ -37,6 +37,20 @@ sub import {
 
     my $hero = $hero_factory->();
 
+    ### example output ###
+    # {
+    #    'name'      => 'Antonio Nicholas Preston'
+    #    'battlecry' => 'Est ipsum corrupti quia voluptatibus.',
+    #    'birthday'  => '2004-04-21',
+    #    'friends'   => [
+    #                     'Jaylin Lillianna Morgan',
+    #                     'Colin Noel Estes',
+    #                     'Justice Aron Hale',
+    #                     'Franco Zane Oneil'
+    #                   ],
+    #    'gender'    => 'Male',
+    # };
+
 =head1 DESCRIPTION
 
 This module generates structured data.
