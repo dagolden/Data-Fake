@@ -18,6 +18,7 @@ our @EXPORT = qw(
   fake_random_int
   fake_random_float
   fake_digits
+  fake_template
 );
 
 use Carp qw/croak/;
@@ -195,6 +196,25 @@ sub fake_digits {
         1 while $copy =~ s{$DIGIT_RE}{int(rand(10))}e;
         $copy =~ s{\\#}{#}g;
         return $copy;
+    };
+}
+
+=func fake_template
+
+    $string_factory = fake_template("Hello, %s", fake_name());
+
+Given a sprintf-style text pattern and a list of generators, returns a
+generator that, when run, executes the generators and returns the string
+populated with the output.
+
+Use this for creating custom generators from other generators.
+
+=cut
+
+sub fake_template {
+    my ( $template, @args ) = @_;
+    return sub {
+        return sprintf( $template, map { _transform($_) } @args );
     };
 }
 

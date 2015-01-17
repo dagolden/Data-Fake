@@ -52,6 +52,19 @@ subtest 'fake_digits' => sub {
     like( $got, qr/^\d{3}-#\d{3}-#\d{3}-\d{3}$/, "digit replacement 2 ($got)" );
 };
 
+subtest 'fake_template' => sub {
+    for ( 1 .. 3 ) {
+        my $fcn = fake_template( "%s.%s.%s.%s", map { fake_random_int( 1, 254 ) } 1 .. 4 );
+        my $got = $fcn->();
+        like( $got, qr/^\d+\.\d+\.\d+\.\d+$/, "template replacement ($got)" );
+    }
+    for ( 1 .. 3 ) {
+        my $fcn = fake_template( '$%.2f', fake_random_float( 0, 10 ) );
+        my $got = $fcn->();
+        like( $got, qr/^\$\d\.\d\d$/, "template replacement 2 ($got)" );
+    }
+};
+
 subtest 'fake_array' => sub {
     my $re = re(qr/^(?:Larry|Damian|Randall)/);
 
