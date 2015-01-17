@@ -15,6 +15,7 @@ our @EXPORT = qw(
   fake_array
   fake_var_array
   fake_choice
+  fake_weighted
   fake_random_int
   fake_random_float
   fake_digits
@@ -22,6 +23,7 @@ our @EXPORT = qw(
 );
 
 use Carp qw/croak/;
+use List::Util qw/sum/;
 
 =func fake_hash
 
@@ -142,6 +144,50 @@ sub fake_choice {
     my (@list) = @_;
     my $size = scalar @list;
     return sub { _transform( $list[ int( rand($size) ) ] ) };
+}
+
+=func fake_weighted
+
+    $generator = fake_weighted(
+        [ 'a_choice',          1 ],
+        [ 'ten_times_likely', 10 ],
+        [ $generator,          1 ],
+    );
+
+Given a list of array references, each containing a value and a
+non-negative weight, returns a generator that randomly selects a value
+according to the relative weights.
+
+If the value is a code reference, it will be run; if it is a hash or array
+reference, it will be recursively evaluated like C<fake_hash> or C<fake_array>
+would do.
+
+=cut
+
+sub fake_weighted {
+    my (@list) = @_;
+    return sub { }
+      unless @list;
+
+    if ( @list != grep { ref($_) eq 'ARRAY' } @list ) {
+        croak("fake_weighted requires a list of array references");
+    }
+
+    # normalize weights into cumulative probabilities
+    my $sum = sum( 0, map { $_->[1] } @list );
+    my $max = 0;
+    for my $s (@list) {
+        $s->[1] = $max += $s->[1] / $sum;
+    }
+    my $last = pop @list;
+
+    return sub {
+        my $rand = rand();
+        for my $s (@list) {
+            return _transform( $s->[0] ) if $rand <= $s->[1];
+        }
+        return _transform( $last->[0] );
+    };
 }
 
 =func fake_random_int

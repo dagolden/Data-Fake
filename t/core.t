@@ -194,6 +194,21 @@ subtest 'fake_maybe_hash' => sub {
     cmp_deeply( $result, {}, "maybe hash, unlikely" );
 };
 
+subtest 'fake_weighted' => sub {
+    my $factory = fake_weighted( [ 'one' => 999 ], [ 'two' => 1 ] );
+    my $result;
+
+    for ( 1 .. 3 ) {
+        my $temp = $factory->();
+        if ( $temp eq 'one' ) {
+            $result ||= $temp;
+        }
+    }
+    is( $result, 'one', "got most likely choice" );
+
+    fake_weighted( [ 'one' => 2 ], [ two => 1 ], [ three => 1 ], [ four => 1 ] );
+};
+
 done_testing;
 # COPYRIGHT
 
