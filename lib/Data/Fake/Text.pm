@@ -15,13 +15,13 @@ our @EXPORT = qw(
   fake_paragraphs
 );
 
-my $lorem;
+my $LOREM;
 
 sub fake_words {
     my ($count) = @_;
     require Text::Lorem;
-    $lorem ||= Text::Lorem->new;
-    return sub { $lorem->words($count) };
+    $LOREM ||= Text::Lorem->new;
+    return sub { $LOREM->words($count) };
 }
 
 sub fake_sentences {
@@ -29,15 +29,15 @@ sub fake_sentences {
     return sub { "" }
       if $count == 0;
     require Text::Lorem;
-    $lorem ||= Text::Lorem->new;
-    return sub { $lorem->sentences($count) };
+    $LOREM ||= Text::Lorem->new;
+    return sub { $LOREM->sentences($count) };
 }
 
 sub fake_paragraphs {
     my ($count) = @_;
     require Text::Lorem;
-    $lorem ||= Text::Lorem->new;
-    return sub { $lorem->paragraphs($count) };
+    $LOREM ||= Text::Lorem->new;
+    return sub { $LOREM->paragraphs($count) };
 }
 
 1;
