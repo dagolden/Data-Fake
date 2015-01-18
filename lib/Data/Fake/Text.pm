@@ -17,12 +17,32 @@ our @EXPORT = qw(
 
 my $LOREM;
 
+=func fake_words
+
+    $generator = fake_words();    # single "lorem" word
+    $generator = fake_words($n);  # N "lorem" words, space separated
+
+Returns a generator that provides space-separated L<Text::Lorem> words.
+The argument is the number of words to return; the default is one.
+
+=cut
+
 sub fake_words {
     my ($count) = @_;
     require Text::Lorem;
     $LOREM ||= Text::Lorem->new;
     return sub { $LOREM->words($count) };
 }
+
+=func fake_sentences
+
+    $generator = fake_sentences();    # single fake sentence
+    $generator = fake_sentences($n);  # N sentences
+
+Returns a generator that provides L<Text::Lorem> sentences.
+The argument is the number of sentences to return; the default is one.
+
+=cut
 
 sub fake_sentences {
     my ($count) = @_;
@@ -32,6 +52,16 @@ sub fake_sentences {
     $LOREM ||= Text::Lorem->new;
     return sub { $LOREM->sentences($count) };
 }
+
+=func fake_paragraphs
+
+    $generator = fake_paragraphs();    # single fake paragraph
+    $generator = fake_paragraphs($n);  # N paragraph
+
+Returns a generator that provides L<Text::Lorem> paragraphs.
+The argument is the number of paragraphs to return; the default is one.
+
+=cut
 
 sub fake_paragraphs {
     my ($count) = @_;
@@ -46,21 +76,16 @@ sub fake_paragraphs {
 
 =head1 SYNOPSIS
 
-    use Data::Fake::Core;
+    use Data::Fake::Text;
+
+    fake_words(2)->();
+    fake_sentences(3)->();
+    fake_paragraphs(1)->();
 
 =head1 DESCRIPTION
 
-This module might be cool, but you'd never know it from the lack
-of documentation.
-
-=head1 USAGE
-
-Good luck!
-
-=head1 SEE ALSO
-
-=for :list
-* Maybe other modules do related things.
+This module provides fake data generators for random words and other
+textual data.
 
 =cut
 

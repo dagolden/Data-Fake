@@ -22,6 +22,15 @@ my ( @company_suffix, $company_suffix_count );
 sub _job_title      { return $job_titles[ int( rand($job_title_count) ) ] }
 sub _company_suffix { return $company_suffix[ int( rand($company_suffix_count) ) ] }
 
+=func fake_company
+
+    $generator = fake_company();
+
+Takes no arguments and returns a generator that returns a randomly generated
+fake company name.
+
+=cut
+
 sub fake_company {
     my $fake_surname = Data::Fake::Names::fake_surname();
     return sub {
@@ -37,6 +46,15 @@ sub fake_company {
         }
     };
 }
+
+=func fake_title
+
+    $generator = fake_title();
+
+Takes no arguments and returns a generator that returns a randomly generated
+job title (drawn from a corpus of ~90 common titles sources from Glassdoor).
+
+=cut
 
 sub fake_title {
     return sub { _job_title() }
@@ -148,21 +166,14 @@ $company_suffix_count = @company_suffix;
 
 =head1 SYNOPSIS
 
-    use Data::Fake::Core;
+    use Data::Fake::Company;
+
+    $fake_company = fake_company()->();
+    $fake_title   = fake_title()->();
 
 =head1 DESCRIPTION
 
-This module might be cool, but you'd never know it from the lack
-of documentation.
-
-=head1 USAGE
-
-Good luck!
-
-=head1 SEE ALSO
-
-=for :list
-* Maybe other modules do related things.
+This module provides fake data generators for company names and job titles.
 
 =cut
 

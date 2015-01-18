@@ -22,6 +22,15 @@ sub _female_first { return $female_first[ int( rand($female_count) ) ] }
 sub _male_first   { return $male_first[ int( rand($male_count) ) ] }
 sub _surname      { return $surnames[ int( rand($surname_count) ) ] }
 
+=func fake_name
+
+    $generator = fake_name();
+
+Returns a generator that provides a randomly selected name with
+first, middle and last name parts.
+
+=cut
+
 sub fake_name {
     return sub {
         my $is_male = ( rand() < 0.5 );
@@ -30,12 +39,29 @@ sub fake_name {
     };
 }
 
+=func fake_first_name
+
+    $generator = fake_first_name();
+
+Returns a generator that provides a randomly selected first name.
+It will be split 50/50 between male and female names.
+
+=cut
+
 sub fake_first_name {
     return sub {
         my $is_male = ( rand() < 0.5 );
         return $is_male ? _male_first() : _female_first();
       }
 }
+
+=func fake_surname
+
+    $generator = fake_surname();
+
+Returns a generator that provides a randomly selected surname.
+
+=cut
 
 sub fake_surname {
     return sub { _surname() }
@@ -364,21 +390,16 @@ $surname_count = @surnames;
 
 =head1 SYNOPSIS
 
-    use Data::Fake::Core;
+    use Data::Fake::Names;
+
+    fake_first_name()->();  # Fred, Mary, etc.
+    fake_surname()->();     # Cooke, Boyle, etc.
+    fake_name()->();        # Fred James Cooke, etc.
 
 =head1 DESCRIPTION
 
-This module might be cool, but you'd never know it from the lack
-of documentation.
-
-=head1 USAGE
-
-Good luck!
-
-=head1 SEE ALSO
-
-=for :list
-* Maybe other modules do related things.
+This module provides fake data generators for person names.  Currently,
+all names are English ASCII, drawn from US government "top names" lists.
 
 =cut
 

@@ -3,7 +3,7 @@ use strict;
 use warnings;
 
 package Data::Fake::Internet;
-# ABSTRACT: Fake Internet data generators
+# ABSTRACT: Fake Internet-related data generators
 
 our $VERSION = '0.001';
 
@@ -22,9 +22,28 @@ my ( @domain_suffixes, $domain_suffix_count );
 
 sub _domain_suffix { return $domain_suffixes[ int( rand($domain_suffix_count) ) ] }
 
+=func fake_tld
+
+    $generator = fake_tld();
+
+Returns a generator that randomly selects from a weighted list of about 50
+domain suffixes based on a list of the top 500 domains by inbound
+root-domain links.
+
+=cut
+
 sub fake_tld {
     return sub { _domain_suffix };
 }
+
+=func fake_domain
+
+    $generator = fake_domain();
+
+Returns a generator that concatenates two random words with a random
+domain suffix.
+
+=cut
 
 sub fake_domain {
     my $prefix_gen = Data::Fake::Text::fake_words(2);
@@ -34,6 +53,15 @@ sub fake_domain {
         join( ".", $prefix, _domain_suffix );
     };
 }
+
+=func fake_email
+
+    $generator = fake_email();
+
+Returns a generator that constructs an email from a random name and a
+random domain.
+
+=cut
 
 sub fake_email {
     my $fn = Data::Fake::Names::fake_first_name;
@@ -113,21 +141,15 @@ $domain_suffix_count = @domain_suffixes;
 
 =head1 SYNOPSIS
 
-    use Data::Fake::Core;
+    use Data::Fake::Internet;
+
+    fake_tld()->();     # .gov, etc.
+    fake_domain()->();  # atqueaut.gov, etc.
+    fake_email()->();   # john.smith@atqueaut.gov, etc.
 
 =head1 DESCRIPTION
 
-This module might be cool, but you'd never know it from the lack
-of documentation.
-
-=head1 USAGE
-
-Good luck!
-
-=head1 SEE ALSO
-
-=for :list
-* Maybe other modules do related things.
+This module provides fake data generators for Internet-related data.
 
 =cut
 

@@ -111,12 +111,38 @@ sub fake_maybe_hash {
     };
 }
 
+=func fake_array
+
+    $generator = fake_array( 5, fake_digits("###-###-####") );
+
+The C<fake_array> takes a positive integer size and source argument –
+either a literal, a reference or another generator – and returns a
+generator that returns an array reference with each element built from the
+source.
+
+If the source is a code reference, it will be run; if the source is a hash
+or array reference, it will be recursively evaluated like C<fake_hash>.
+
+=cut
+
 sub fake_array {
     my ( $size, $template ) = @_;
     return sub {
         [ map { _transform($template) } 1 .. $size ];
     };
 }
+
+=func fake_var_array
+
+    $generator = fake_var_array( 1, 3, $generator );
+
+The C<fake_var_array> works like C<fake_array>, but takes a minimum length,
+a maximum length and a source.
+
+The generator returns an array reference with a randomly-selected number of
+elements between the minimum and maximum length.
+
+=cut
 
 sub fake_var_array {
     my ( $min, $max, $template ) = @_;
@@ -233,7 +259,7 @@ sub fake_float {
     $generator = fake_digits("###-####"); # "555-1234"
     $generator = fake_digits("\###");     # "#12"
 
-Given a text pattern, returns a generator that replaces all occurances of
+Given a text pattern, returns a generator that replaces all occurrences of
 the sharp character (C<#>) with a randomly selected digit.  To have a
 literal sharp character, escape it with a backslash.
 
@@ -318,19 +344,21 @@ sub _transform {
 
     use Data::Fake::Core;
 
+    $generator = fake_hash(
+        {
+            ssn             => fake_digits("###-##-###"),
+            phrase          => fake_template(
+                                "%s world", fake_choice(qw/hello goodbye/)
+                               ),
+            die_rolls       => fake_array( 3, fake_int(1, 6) ),
+            temperature     => fake_float(-20.0, 120.0),
+        }
+    );
+
 =head1 DESCRIPTION
 
-This module might be cool, but you'd never know it from the lack
-of documentation.
-
-=head1 USAGE
-
-Good luck!
-
-=head1 SEE ALSO
-
-=for :list
-* Maybe other modules do related things.
+This module provides a general-purpose set of fake data functions to generate
+structured data, numeric data, structured strings, and weighted alternatives.
 
 =cut
 
