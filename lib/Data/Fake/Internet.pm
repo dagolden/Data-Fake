@@ -41,7 +41,7 @@ sub fake_email {
     my $dn = fake_domain;
     return sub {
         return sprintf( "%s.%s@%s", map { lc } map { $_->() } $fn, $ln, $dn );
-      }
+    };
 }
 
 # list and frequencey of most common domains suffixes taken from moz.org
