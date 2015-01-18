@@ -21,8 +21,10 @@ my %WriteMakefileArgs = (
   "MIN_PERL_VERSION" => "5.008001",
   "NAME" => "Data::Fake",
   "PREREQ_PM" => {
+    "Carp" => 0,
     "Exporter" => "5.57",
     "Import::Into" => 0,
+    "List::Util" => 0,
     "Text::Lorem" => 0,
     "Time::Piece" => 0,
     "strict" => 0,
@@ -42,10 +44,12 @@ my %WriteMakefileArgs = (
 
 
 my %FallbackPrereqs = (
+  "Carp" => 0,
   "Exporter" => "5.57",
   "ExtUtils::MakeMaker" => "6.17",
   "File::Spec" => 0,
   "Import::Into" => 0,
+  "List::Util" => 0,
   "Test::Deep" => 0,
   "Test::More" => "0.96",
   "Text::Lorem" => 0,
