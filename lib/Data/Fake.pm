@@ -87,8 +87,7 @@ on the template and nested generators.
 
 =head2 Loading the right submodules
 
-Factory functions are exported by submodules, loosely grouped by topic by
-submodules:
+Factory functions are exported by submodules, loosely grouped by topic:
 
 =for :list
 * L<Data::Fake::Core> – general purpose generators: hashes, arrays,
@@ -138,15 +137,58 @@ Then generate the hundred instances, each with three fake phone numbers:
 See L<Data::Fake::Examples> for ideas for how to use and combine
 generators.
 
+=head2 Using custom generators
+
+Generators are just code references.  You can use your own anywhere a
+Data::Fake generator could be used:
+
+    $generator = fake_hash(
+        favorite_color => \&my_favorite_color_picker,
+        number_squared => sub { ( int(rand(10)) + 1 ) ** 2 },
+    );
+
+You can (and probably should) write your own factory functions for
+anything complex or that you'll use more than once.  You can use
+Data::Fake generators as part of your these functions.
+
+    use Data::Fake qw/Core/;
+
+    sub fake_squared_int {
+        my $max_int = shift;
+        my $prng = fake_int( 1, $max_int );
+        return sub { $prng->() ** 2 };
+    }
+
+    $generator = fake_hash(
+        number_squared => fake_squared_int(10),
+    );
+
+=head2 Caveats and special cases
+
+Because many data structures are walked recursively looking for
+code-references to replace, circular references will cause an infinite
+loop.
+
+If you need a code references as part of your output data structure, you
+need to wrap it in a code reference.
+
+    $generator = fake_hash(
+        a_function => sub { \&some_function },
+    );
+
 =head1 CONTRIBUTING
 
 If you have ideas for additional generator functions and think they would
 be sensible additions to the main distribution, please open a support ticket
 to discuss it.  To be included in the main distribution, additional
-dependencies should be have few, if any, additional dependencies.
+dependencies should be add few, if any, additional dependencies.
 
 If you would like to release your own distributions in the C<Data::Fake::*>
-namespace, please follow the conventions of the existing modules.
+namespace, please follow the conventions of the existing modules:
+
+=for :list
+* factory function names start with "fake_"
+* export all factory functions by default
 
 =head1 SEE ALSO
 
