@@ -189,6 +189,7 @@ namespace, please follow the conventions of the existing modules:
 =for :list
 * factory function names start with "fake_"
 * export all factory functions by default
+* allow code-references where you would allow a sizing constant
 
 =head1 SEE ALSO
 

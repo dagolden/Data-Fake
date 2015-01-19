@@ -13,7 +13,6 @@ our @EXPORT = qw(
   fake_hash
   fake_maybe_hash
   fake_array
-  fake_var_array
   fake_choice
   fake_weighted
   fake_int
@@ -21,6 +20,8 @@ our @EXPORT = qw(
   fake_digits
   fake_template
 );
+
+our @EXPORT_OK = qw/_transform/;
 
 use Carp qw/croak/;
 use List::Util qw/sum/;
@@ -120,6 +121,12 @@ either a literal, a reference or another generator – and returns a
 generator that returns an array reference with each element built from the
 source.
 
+If the size is a code reference, it will be run and can set a different size
+for every array generated:
+
+    # arrays from size 1 to size 6
+    $generator = fake_array( fake_int(1,6), fake_digits("###-###-###") );
+
 If the source is a code reference, it will be run; if the source is a hash
 or array reference, it will be recursively evaluated like C<fake_hash>.
 
@@ -128,29 +135,7 @@ or array reference, it will be recursively evaluated like C<fake_hash>.
 sub fake_array {
     my ( $size, $template ) = @_;
     return sub {
-        [ map { _transform($template) } 1 .. $size ];
-    };
-}
-
-=func fake_var_array
-
-    $generator = fake_var_array( 1, 3, $generator );
-
-The C<fake_var_array> works like C<fake_array>, but takes a minimum length,
-a maximum length and a source.
-
-The generator returns an array reference with a randomly-selected number of
-elements between the minimum and maximum length.
-
-=cut
-
-sub fake_var_array {
-    my ( $min, $max, $template ) = @_;
-    return sub {
-        my $length = $min + int( rand( $max - $min + 1 ) );
-        return [] if $length == 0;
-        my $last = $min + $length - 1;
-        return [ map { _transform($template) } $min .. $last ];
+        [ map { _transform($template) } 1 .. _transform($size) ];
     };
 }
 

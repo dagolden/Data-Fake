@@ -105,13 +105,13 @@ subtest 'fake_array' => sub {
     );
 };
 
-subtest 'fake_var_array' => sub {
+subtest 'variable size fake_array' => sub {
     my $re = qr/^(?:Larry|Damian|Randall)/;
 
     for my $max_size ( 3 .. 4 ) {
         for my $min_size ( 0 .. 2 ) {
-            my $factory =
-              fake_var_array( $min_size, $max_size, fake_choice(qw/Larry Damian Randall/) );
+            my $factory = fake_array( fake_int( $min_size, $max_size ),
+                fake_choice(qw/Larry Damian Randall/) );
 
             for my $i ( 1 .. 10 ) {
                 my $got    = $factory->();
