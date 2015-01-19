@@ -34,7 +34,7 @@ fake company name.
 
 sub fake_company {
     my $fake_surname = Data::Fake::Names::fake_surname();
-    return Data::Fake::Core::fake_choice(
+    return Data::Fake::Core::fake_pick(
         Data::Fake::Core::fake_template( "%s, %s", $fake_surname, \&_company_suffix ),
         Data::Fake::Core::fake_template( "%s-%s",         ($fake_surname) x 2 ),
         Data::Fake::Core::fake_template( "%s, %s and %s", ($fake_surname) x 3 ),

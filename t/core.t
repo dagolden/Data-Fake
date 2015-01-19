@@ -6,19 +6,19 @@ use Test::Deep;
 
 use Data::Fake::Core;
 
-subtest 'fake_choice' => sub {
+subtest 'fake_pick' => sub {
     my %list = map { $_ => 1 } qw/one two three/;
-    my $chooser = fake_choice( keys %list );
+    my $chooser = fake_pick( keys %list );
     for ( 1 .. 10 ) {
         my $got = $chooser->();
         ok( exists( $list{$got} ), "got key $got in list" );
     }
 
-    $chooser = fake_choice( fake_int( 10, 99 ), fake_float( 0, 1 ), );
+    $chooser = fake_pick( fake_int( 10, 99 ), fake_float( 0, 1 ), );
     for ( 1 .. 10 ) {
         my $got = $chooser->();
         my $re  = qr/^(?:0\.\d+|\d\d)$/;
-        like( $got, $re, "fake_choice evaluated options as expected" );
+        like( $got, $re, "fake_pick evaluated options as expected" );
     }
 
 };
@@ -77,7 +77,7 @@ subtest 'fake_array' => sub {
     my $re = re(qr/^(?:Larry|Damian|Randall)/);
 
     for my $size ( 2 .. 4 ) {
-        my $factory = fake_array( $size, fake_choice(qw/Larry Damian Randall/) );
+        my $factory = fake_array( $size, fake_pick(qw/Larry Damian Randall/) );
 
         my $expected = [ map { $re } 1 .. $size ];
 
@@ -97,7 +97,7 @@ subtest 'fake_array' => sub {
         "generated array with constant hash structure"
     );
 
-    $got = fake_array( 2, { name => fake_choice(qw/Larry Damian Randall/) } )->();
+    $got = fake_array( 2, { name => fake_pick(qw/Larry Damian Randall/) } )->();
     cmp_deeply(
         $got,
         [ { name => $re }, { name => $re } ],
@@ -110,8 +110,9 @@ subtest 'variable size fake_array' => sub {
 
     for my $max_size ( 3 .. 4 ) {
         for my $min_size ( 0 .. 2 ) {
-            my $factory = fake_array( fake_int( $min_size, $max_size ),
-                fake_choice(qw/Larry Damian Randall/) );
+            my $factory =
+              fake_array( fake_int( $min_size, $max_size ),
+                fake_pick(qw/Larry Damian Randall/) );
 
             for my $i ( 1 .. 10 ) {
                 my $got    = $factory->();
@@ -131,11 +132,11 @@ subtest 'variable size fake_array' => sub {
 subtest 'fake_hash' => sub {
     my $factory = fake_hash(
         {
-            name  => fake_choice(qw/Larry Damian Randall/),
+            name  => fake_pick(qw/Larry Damian Randall/),
             phone => fake_hash(
                 {
-                    home => fake_choice( "555-1212", "555-1234" ),
-                    work => fake_choice( "666-1234", "666-7777" ),
+                    home => fake_pick( "555-1212", "555-1234" ),
+                    work => fake_pick( "666-1234", "666-7777" ),
                 }
             ),
             color => 'blue',
@@ -157,12 +158,12 @@ subtest 'fake_hash' => sub {
     }
 
     $factory = fake_hash(
-        { name => fake_choice(qw/Larry Damian Randall/) },
+        { name => fake_pick(qw/Larry Damian Randall/) },
         fake_hash(
             {
                 phone => {
-                    home => fake_choice( "555-1212", "555-1234" ),
-                    work => fake_choice( "666-1234", "666-7777" ),
+                    home => fake_pick( "555-1212", "555-1234" ),
+                    work => fake_pick( "666-1234", "666-7777" ),
                 },
             }
         ),

@@ -13,7 +13,7 @@ our @EXPORT = qw(
   fake_hash
   fake_maybe_hash
   fake_array
-  fake_choice
+  fake_pick
   fake_weighted
   fake_int
   fake_float
@@ -31,7 +31,7 @@ use List::Util qw/sum/;
     $generator = fake_hash(
         {
             name => fake_name,
-            pet => fake_choice(qw/dog cat frog/),
+            pet => fake_pick(qw/dog cat frog/),
         }
     );
 
@@ -139,10 +139,10 @@ sub fake_array {
     };
 }
 
-=func fake_choice
+=func fake_pick
 
-    $generator = fake_choice( qw/one two three/ );
-    $generator = fake_choice( @generators );
+    $generator = fake_pick( qw/one two three/ );
+    $generator = fake_pick( @generators );
 
 Given literal values or code references, returns a generator that randomly
 selects one of them.  If the choice is a code reference, it will be run; if
@@ -151,7 +151,7 @@ like C<fake_hash> or C<fake_array> would do.
 
 =cut
 
-sub fake_choice {
+sub fake_pick {
     my (@list) = @_;
     my $size = scalar @list;
     return sub { _transform( $list[ int( rand($size) ) ] ) };
@@ -333,7 +333,7 @@ sub _transform {
         {
             ssn             => fake_digits("###-##-###"),
             phrase          => fake_template(
-                                "%s world", fake_choice(qw/hello goodbye/)
+                                "%s world", fake_pick(qw/hello goodbye/)
                                ),
             die_rolls       => fake_array( 3, fake_int(1, 6) ),
             temperature     => fake_float(-20.0, 120.0),
