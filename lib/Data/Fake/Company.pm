@@ -14,6 +14,7 @@ our @EXPORT = qw(
   fake_title
 );
 
+use Data::Fake::Core  ();
 use Data::Fake::Names ();
 
 my ( @job_titles,     $job_title_count );
@@ -33,18 +34,11 @@ fake company name.
 
 sub fake_company {
     my $fake_surname = Data::Fake::Names::fake_surname();
-    return sub {
-        my $format = int( rand(3) );
-        if ( $format == 0 ) {
-            return sprintf( "%s, %s", $fake_surname->(), _company_suffix );
-        }
-        elsif ( $format == 1 ) {
-            return sprintf( "%s-%s", map { $fake_surname->() } 1 .. 2 );
-        }
-        elsif ( $format == 2 ) {
-            return sprintf( "%s, %s and %s", map { $fake_surname->() } 1 .. 3 );
-        }
-    };
+    return Data::Fake::Core::fake_choice(
+        Data::Fake::Core::fake_template( "%s, %s", $fake_surname, \&_company_suffix ),
+        Data::Fake::Core::fake_template( "%s-%s",         ($fake_surname) x 2 ),
+        Data::Fake::Core::fake_template( "%s, %s and %s", ($fake_surname) x 3 ),
+    );
 }
 
 =func fake_title
