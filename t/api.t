@@ -11,9 +11,9 @@ subtest 'Core' => sub {
 
     Test::More::can_ok( "Test1", $_ ) for qw(
       fake_hash
-      fake_maybe_hash
       fake_array
       fake_pick
+      fake_binomial
       fake_weighted
       fake_int
       fake_float

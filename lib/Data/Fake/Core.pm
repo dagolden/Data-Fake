@@ -11,9 +11,9 @@ use Exporter 5.57 qw/import/;
 
 our @EXPORT = qw(
   fake_hash
-  fake_maybe_hash
   fake_array
   fake_pick
+  fake_binomial
   fake_weighted
   fake_int
   fake_float
@@ -55,8 +55,13 @@ be merged according to the following rules:
 * hash references will be shallow-merged left-to-right
 
 This merging is a bit peculiar, but allows for generating hashes that might
-have missing or dynamic keys, using L</fake_maybe_hash> and
-L</fake_var_hash>.
+have missing keys, using L</fake_binomial>:
+
+    # 25% of the time, generate a hash with a 'spouse' key
+    $factory = fake_hash(
+        { ... },
+        fake_binomial( 0.25, { spouse => fake_name }, {} ),
+    );
 
 =cut
 
@@ -70,45 +75,6 @@ sub fake_hash {
             @{$result}{ keys %$next } = @{$next}{ keys %$next };
         }
         return $result;
-    };
-}
-
-=func fake_maybe_hash
-
-    $generator = fake_maybe_hash(
-        0.90, # 90% likely
-        {
-            name => fake_name()
-        }
-    );
-
-The C<fake_maybe_hash> function takes a probability and a hash reference or
-hash reference generator.  The probability (between 0 and 1.0) indicates
-the likelihood that the return value will be a hash generated from the
-input.  The rest of the time, an empty hash reference will be returned.
-
-Use this function to help construct hashes that might be missing keys:
-
-    # 25% of the time, generate a hash with a 'spouse' key
-    $factory = fake_hash(
-        { ... },
-        fake_maybe_hash( 0.25, { spouse => fake_name } ),
-    );
-
-=cut
-
-sub fake_maybe_hash {
-    my ( $prob, $template ) = @_;
-    croak "fake_maybe_hash probability must be between 0 and 1.0"
-      unless defined($prob) && $prob >= 0 && $prob <= 1.0;
-    return sub {
-        if ( rand() <= $prob ) {
-            my $result = _transform($template);
-            croak "fake_maybe_hash input requires a hash reference as input"
-              unless ref($result) eq 'HASH';
-            return $result;
-        }
-        return {};
     };
 }
 
@@ -155,6 +121,34 @@ sub fake_pick {
     my (@list) = @_;
     my $size = scalar @list;
     return sub { _transform( $list[ int( rand($size) ) ] ) };
+}
+
+=func fake_binomial
+
+    $generator = fake_binomial(
+        0.90,
+        { name => fake_name() }, # 90% likely
+        {},                      # 10% likely
+    );
+
+    $generator = fake_binomial( $prob, $lte_outcome, $gt_outcome );
+
+The C<fake_binomial> function takes a probability and two outcomes.  The
+probability (between 0 and 1.0) indicates the likelihood that the return
+value will the first outcome.  The rest of the time, the return value will
+be the second outcome.  If the outcome is a code reference, it will be run;
+if the outcome is a hash or array references, it will be recursively
+evaluated like C<fake_hash> or C<fake_array> would do.
+
+=cut
+
+sub fake_binomial {
+    my ( $prob, $first, $second ) = @_;
+    croak "fake_binomial probability must be between 0 and 1.0"
+      unless defined($prob) && $prob >= 0 && $prob <= 1.0;
+    return sub {
+        return _transform( rand() <= $prob ? $first : $second );
+    };
 }
 
 =func fake_weighted

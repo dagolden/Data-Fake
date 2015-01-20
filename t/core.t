@@ -173,8 +173,8 @@ subtest 'fake_hash' => sub {
     cmp_deeply( $factory->(), $expected, "generated hash from fragments" );
 };
 
-subtest 'fake_maybe_hash' => sub {
-    my $factory = fake_maybe_hash( 0.999, { name => 'Joe' } );
+subtest 'fake_binomial' => sub {
+    my $factory = fake_binomial( 0.999, { name => 'Joe' }, {} );
     my $result;
     for ( 1 .. 3 ) {
         my $temp = $factory->();
@@ -184,7 +184,7 @@ subtest 'fake_maybe_hash' => sub {
     }
     cmp_deeply( $result, { name => 'Joe' }, "maybe hash, likely" );
 
-    $factory = fake_maybe_hash( 0.001, { name => 'Joe' } );
+    $factory = fake_binomial( 0.001, { name => 'Joe' }, {} );
     $result = undef;
     for ( 1 .. 3 ) {
         my $temp = $factory->();
