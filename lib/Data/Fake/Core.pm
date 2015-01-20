@@ -52,15 +52,15 @@ be merged according to the following rules:
 * code references will be replaced with their outputs
 * after replacement, if any arguments aren't hash references, an exception
   will be thrown
-* hash references will be shallow-merged left-to-right
+* hash references will be shallow-merged
 
-This merging is a bit peculiar, but allows for generating hashes that might
-have missing keys, using L</fake_binomial>:
+This merging allows for generating sections of hashes differently or
+generating hashes that have missing keys (e.g. using L</fake_binomial>):
 
     # 25% of the time, generate a hash with a 'spouse' key
     $factory = fake_hash(
         { ... },
-        fake_binomial( 0.25, { spouse => fake_name }, {} ),
+        fake_binomial( 0.25, { spouse => fake_name() }, {} ),
     );
 
 =cut
@@ -111,9 +111,9 @@ sub fake_array {
     $generator = fake_pick( @generators );
 
 Given literal values or code references, returns a generator that randomly
-selects one of them.  If the choice is a code reference, it will be run; if
-the choice is a hash or array references, it will be recursively evaluated
-like C<fake_hash> or C<fake_array> would do.
+selects one of them with equal probability.  If the choice is a code
+reference, it will be run; if the choice is a hash or array references, it
+will be recursively evaluated like C<fake_hash> or C<fake_array> would do.
 
 =cut
 
@@ -156,7 +156,7 @@ sub fake_binomial {
     $generator = fake_weighted(
         [ 'a_choice',          1 ],
         [ 'ten_times_likely', 10 ],
-        [ $generator,          1 ],
+        [ $another_generator,  1 ],
     );
 
 Given a list of array references, each containing a value and a
