@@ -210,6 +210,12 @@ subtest 'fake_weighted' => sub {
     fake_weighted( [ 'one' => 2 ], [ two => 1 ], [ three => 1 ], [ four => 1 ] );
 };
 
+subtest 'fake_join' => sub {
+    my $factory = fake_join( ",", ( fake_int( 1, 10 ) ) x 2 );
+    my $got = $factory->();
+    like( $got, qr/^\d+,\d+$/, "got joined output ($got)" );
+};
+
 done_testing;
 # COPYRIGHT
 

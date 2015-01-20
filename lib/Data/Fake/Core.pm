@@ -19,6 +19,7 @@ our @EXPORT = qw(
   fake_float
   fake_digits
   fake_template
+  fake_join
 );
 
 our @EXPORT_OK = qw/_transform/;
@@ -278,6 +279,28 @@ sub fake_template {
     my ( $template, @args ) = @_;
     return sub {
         return sprintf( $template, map { _transform($_) } @args );
+    };
+}
+
+=func fake_join
+
+    $generator = fake_join(" ", fake_first_name(), fake_surname() );
+
+Given a character to join on a list of literals or generators, returns a
+generator that, when run, executes any generators and returns them concatenated
+together, separated by the separator character.
+
+The separator itself may also be a generator if you want that degree of
+randomness as well.
+
+    $generator = fake_join( fake_pick( q{}, q{ }, q{,} ), @args );
+
+=cut
+
+sub fake_join {
+    my ( $char, @args ) = @_;
+    return sub {
+        return join( _transform($char), map { _transform($_) } @args );
     };
 }
 

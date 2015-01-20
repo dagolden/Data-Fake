@@ -19,6 +19,7 @@ subtest 'Core' => sub {
       fake_float
       fake_digits
       fake_template
+      fake_join
     );
 };
 
