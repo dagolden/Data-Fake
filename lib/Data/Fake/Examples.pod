@@ -1,0 +1,23 @@
+# PODNAME: Data::Fake::Examples
+# ABSTRACT: Examples of combining Data::Fake generators
+
+=head1 EXAMPLES
+
+I plan to add additional examples here over time.  Contributions are
+welcome.
+
+=head2 URLs
+
+    # http://example.com/
+    # https://www.example.com/
+    # http://www23.example.com/
+
+    use Data::Fake qw/Core Internet/;
+
+    my $fake_url = fake_template(
+        "%s://%s%s/",
+        fake_pick(qw(http https)),
+        fake_pick( "", "www.", fake_digits("www##.") ),
+        fake_domain(),
+    );
+

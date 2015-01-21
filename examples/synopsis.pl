@@ -1,4 +1,4 @@
-use v5.10;
+use 5.008001;
 use strict;
 use warnings;
 
@@ -17,4 +17,4 @@ my $hero_factory = fake_hash(
 
 my $hero = $hero_factory->();
 
-say Dumper($hero);
+print Dumper($hero) . "\n";
