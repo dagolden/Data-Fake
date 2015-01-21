@@ -83,10 +83,9 @@ sub fake_hash {
 
     $generator = fake_array( 5, fake_digits("###-###-####") );
 
-The C<fake_array> takes a positive integer size and source argument –
-either a literal, a reference or another generator – and returns a
-generator that returns an array reference with each element built from the
-source.
+The C<fake_array> takes a positive integer size and source argument and
+returns a generator that returns an array reference with each element built
+from the source.
 
 If the size is a code reference, it will be run and can set a different size
 for every array generated:
@@ -113,7 +112,7 @@ sub fake_array {
 
 Given literal values or code references, returns a generator that randomly
 selects one of them with equal probability.  If the choice is a code
-reference, it will be run; if the choice is a hash or array references, it
+reference, it will be run; if the choice is a hash or array reference, it
 will be recursively evaluated like C<fake_hash> or C<fake_array> would do.
 
 =cut
@@ -138,7 +137,7 @@ The C<fake_binomial> function takes a probability and two outcomes.  The
 probability (between 0 and 1.0) indicates the likelihood that the return
 value will the first outcome.  The rest of the time, the return value will
 be the second outcome.  If the outcome is a code reference, it will be run;
-if the outcome is a hash or array references, it will be recursively
+if the outcome is a hash or array reference, it will be recursively
 evaluated like C<fake_hash> or C<fake_array> would do.
 
 =cut

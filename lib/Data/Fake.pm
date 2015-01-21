@@ -75,7 +75,7 @@ etc. factory functions:
             name      => fake_name(),
             battlecry => fake_sentences(1),
             birthday  => fake_past_date("%Y-%m-%d"),
-            friends   => fake_var_array( 3, 6, fake_name() ),
+            friends   => fake_array( fake_int(2,4), fake_name() ),
             gender    => fake_pick(qw/Male Female Other/),
         }
     );
@@ -149,7 +149,7 @@ Data::Fake generator could be used:
 
 You can (and probably should) write your own factory functions for
 anything complex or that you'll use more than once.  You can use
-Data::Fake generators as part of your these functions.
+Data::Fake generators as part of these functions.
 
     use Data::Fake qw/Core/;
 
@@ -181,7 +181,7 @@ need to wrap it in a code reference.
 If you have ideas for additional generator functions and think they would
 be sensible additions to the main distribution, please open a support ticket
 to discuss it.  To be included in the main distribution, additional
-dependencies should be add few, if any, additional dependencies.
+dependencies should add few, if any, additional dependencies.
 
 If you would like to release your own distributions in the C<Data::Fake::*>
 namespace, please follow the conventions of the existing modules:
@@ -194,7 +194,8 @@ namespace, please follow the conventions of the existing modules:
 =head1 SEE ALSO
 
 =for :list
-* L<Data::Faker> – similar but object oriented; always loads all plugins
+* L<Data::Faker> – similar but object oriented; doesn't do structured data;
+  always loads all plugins
 * L<Data::Random> – generate several random types of data
 * L<Test::Sims> – generator for libraries generating random data
 * L<Text::Lorem> – just fake text
