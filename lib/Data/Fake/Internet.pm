@@ -151,6 +151,8 @@ $domain_suffix_count = @domain_suffixes;
 
 This module provides fake data generators for Internet-related data.
 
+All functions are exported by default.
+
 =cut
 
 # vim: ts=4 sts=4 sw=4 et tw=75:

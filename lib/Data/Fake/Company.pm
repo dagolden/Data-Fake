@@ -169,6 +169,8 @@ $company_suffix_count = @company_suffix;
 
 This module provides fake data generators for company names and job titles.
 
+All functions are exported by default.
+
 =cut
 
 # vim: ts=4 sts=4 sw=4 et tw=75:

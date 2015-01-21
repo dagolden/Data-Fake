@@ -401,6 +401,8 @@ $surname_count = @surnames;
 This module provides fake data generators for person names.  Currently,
 all names are English ASCII, drawn from US government "top names" lists.
 
+All functions are exported by default.
+
 =cut
 
 # vim: ts=4 sts=4 sw=4 et tw=75:

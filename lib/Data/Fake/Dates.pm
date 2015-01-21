@@ -111,6 +111,8 @@ sub fake_future_datetime {
 
 This module provides fake data generators for past and future dates and times.
 
+All functions are exported by default.
+
 =cut
 
 # vim: ts=4 sts=4 sw=4 et tw=75:

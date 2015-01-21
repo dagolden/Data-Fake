@@ -362,6 +362,8 @@ sub _transform {
 This module provides a general-purpose set of fake data functions to generate
 structured data, numeric data, structured strings, and weighted alternatives.
 
+All functions are exported by default.
+
 =cut
 
 # vim: ts=4 sts=4 sw=4 et tw=75:
