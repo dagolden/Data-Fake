@@ -2,6 +2,11 @@ Revision history for Data-Fake
 
 {{$NEXT}}
 
+    [FIXES]
+
+    - Work around Time::Piece portability problems; requires
+      Time::Piece 1.27
+
 0.001     2015-01-21 16:08:10-05:00 America/New_York
 
     - First release

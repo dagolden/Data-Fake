@@ -16,7 +16,7 @@ our @EXPORT = qw(
   fake_future_datetime
 );
 
-use Time::Piece;
+use Time::Piece 1.27; # portability fixes
 
 sub _past { int( rand(time) ) }
 
@@ -64,7 +64,7 @@ The default format is ISO8601 UTC "Zulu" time (C<%Y-%m-%dT%TZ>).
 
 sub fake_past_datetime {
     my ($format) = @_;
-    $format ||= "%Y-%m-%dT%TZ";
+    $format ||= "%Y-%m-%dT%H:%M:%SZ";
     return sub {
         Time::Piece->strptime( _past(), "%s" )->strftime($format);
     };
@@ -86,7 +86,7 @@ The default format is ISO8601 UTC "Zulu" time (C<%Y-%m-%dT%TZ>).
 
 sub fake_future_datetime {
     my ($format) = @_;
-    $format ||= "%Y-%m-%dT%TZ";
+    $format ||= "%Y-%m-%dT%H:%M:%SZ";
     return sub {
         Time::Piece->strptime( _future(), "%s" )->strftime($format);
     };

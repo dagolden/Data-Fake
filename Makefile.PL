@@ -26,7 +26,7 @@ my %WriteMakefileArgs = (
     "Import::Into" => 0,
     "List::Util" => 0,
     "Text::Lorem" => 0,
-    "Time::Piece" => 0,
+    "Time::Piece" => "1.27",
     "strict" => 0,
     "warnings" => 0
   },
@@ -53,7 +53,7 @@ my %FallbackPrereqs = (
   "Test::Deep" => 0,
   "Test::More" => "0.96",
   "Text::Lorem" => 0,
-  "Time::Piece" => 0,
+  "Time::Piece" => "1.27",
   "strict" => 0,
   "warnings" => 0
 );
