@@ -2,6 +2,8 @@ Revision history for Data-Fake
 
 {{$NEXT}}
 
+0.002     2015-02-05 18:54:46-05:00 America/New_York
+
     [FIXES]
 
     - Work around Time::Piece portability problems; requires
