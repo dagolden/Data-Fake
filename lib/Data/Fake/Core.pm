@@ -235,8 +235,8 @@ sub fake_float {
 
 =func fake_digits
 
-    $generator = fake_digits("###-####"); # "555-1234"
-    $generator = fake_digits("\###");     # "#12"
+    $generator = fake_digits('###-####'); # "555-1234"
+    $generator = fake_digits('\###');     # "#12"
 
 Given a text pattern, returns a generator that replaces all occurrences of
 the sharp character (C<#>) with a randomly selected digit.  To have a
