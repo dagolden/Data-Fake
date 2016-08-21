@@ -240,13 +240,15 @@ sub fake_float {
 
 Given a text pattern, returns a generator that replaces all occurrences of
 the sharp character (C<#>) with a randomly selected digit.  To have a
-literal sharp character, escape it with a backslash.
+literal sharp character, escape it with a backslash (do it in a
+single-quoted string to avoid having to double your backslash to get a
+backslash in the string.).
 
 Use this for phone numbers, currencies, or whatever else needs random
 digits:
 
-    fake_digits("###-##-####");     # US Social Security Number
-    fake_digits("(###) ###-####");  # (800) 555-1212
+    fake_digits('###-##-####');     # US Social Security Number
+    fake_digits('(###) ###-####');  # (800) 555-1212
 
 =cut
 
