@@ -12,6 +12,7 @@ use Exporter 5.57 qw/import/;
 our @EXPORT = qw(
   fake_hash
   fake_array
+  fake_flatten
   fake_pick
   fake_binomial
   fake_weighted
@@ -303,6 +304,39 @@ sub fake_join {
     return sub {
         return join( _transform($char), map { _transform($_) } @args );
     };
+}
+
+=func fake_flatten
+
+    $flatten_generator = fake_flatten( fake_array( 3, fake_first_name() ) );
+    @array_of_names = $flatten_generator->();
+
+Given a generator that returns an array ref (such as fake_array) or a
+hash ref (fake_hash), fake_flatten returns a generator that, when run,
+executes the generators and returns their result in a dereferenced state.
+
+This is particuallly useful when the return value to being directly,
+for example within a fake_join.
+
+    $generator = fake_join( " ", $flatten_generator );
+
+=cut
+
+sub fake_flatten {
+    my ($ref) = @_;
+
+    return sub {
+        my $result     = _transform($ref);
+        my $result_ref = ref($result);
+        if ( $result_ref eq 'ARRAY' ) {
+            return @$result;
+        }
+        elsif ( $result_ref eq 'HASH' ) {
+            return %$result;
+        }
+
+        croak "I do not know how to flatten a $result_ref";
+      }
 }
 
 sub _transform {
