@@ -315,8 +315,8 @@ Given a generator that returns an array ref (such as fake_array) or a
 hash ref (fake_hash), fake_flatten returns a generator that, when run,
 executes the generators and returns their result in a dereferenced state.
 
-This is particuallly useful when the return value to being directly,
-for example within a fake_join.
+This is particularly useful when the return value is used directly as
+input to another function, for example within a fake_join.
 
     $generator = fake_join( " ", $flatten_generator );
 
