@@ -5,7 +5,7 @@ use warnings;
 package Data::Fake::Names;
 # ABSTRACT: Fake name data generators
 
-our $VERSION = '0.004';
+our $VERSION = '0.005';
 
 use Exporter 5.57 qw/import/;
 
