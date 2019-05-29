@@ -33,6 +33,7 @@ provide the number of words); the default is one.
 
 sub fake_words {
     my ($count) = @_;
+    $count = 1 unless defined $count;
     require Text::Lorem;
     $LOREM ||= Text::Lorem->new;
     return sub { $LOREM->words( _transform($count) ) };
@@ -52,6 +53,7 @@ number of sentences); the default is one.
 
 sub fake_sentences {
     my ($count) = @_;
+    $count = 1 unless defined $count;
     return sub { "" }
       if $count == 0;
     require Text::Lorem;
@@ -73,6 +75,7 @@ number of paragraphs); the default is one.
 
 sub fake_paragraphs {
     my ($count) = @_;
+    $count = 1 unless defined $count;
     require Text::Lorem;
     $LOREM ||= Text::Lorem->new;
     return sub { $LOREM->paragraphs( _transform($count) ) };
