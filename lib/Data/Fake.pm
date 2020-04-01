@@ -181,7 +181,7 @@ need to wrap it in a code reference.
 If you have ideas for additional generator functions and think they would
 be sensible additions to the main distribution, please open a support ticket
 to discuss it.  To be included in the main distribution, additional
-dependencies should add few, if any, additional dependencies.
+generator functions should add few, if any, additional dependencies.
 
 If you would like to release your own distributions in the C<Data::Fake::*>
 namespace, please follow the conventions of the existing modules:
