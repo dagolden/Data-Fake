@@ -84,7 +84,7 @@ sub fake_hash {
 
     $generator = fake_array( 5, fake_digits("###-###-####") );
 
-The C<fake_array> takes a positive integer size and source argument and
+The C<fake_array> takes a positive integer size and source argument and
 returns a generator that returns an array reference with each element built
 from the source.
 
