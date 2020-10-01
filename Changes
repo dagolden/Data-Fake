@@ -6,6 +6,8 @@ Revision history for Data-Fake
 
     - Require Import::Into 1.002005
 
+    - Allow calling text generators with no argument
+
 0.004     2018-06-20 14:40:25-06:00 America/Denver
 
     [ADDED]
