@@ -7,7 +7,7 @@ package Data::Fake;
 
 our $VERSION = '0.005';
 
-use Import::Into;
+use Import::Into 1.002005;
 
 sub import {
     my $class = shift;

@@ -2,6 +2,10 @@ Revision history for Data-Fake
 
 {{$NEXT}}
 
+    [FIXED]
+
+    - Require Import::Into 1.002005
+
 0.004     2018-06-20 14:40:25-06:00 America/Denver
 
     [ADDED]
