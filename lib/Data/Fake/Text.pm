@@ -25,9 +25,9 @@ my $LOREM;
     $generator = fake_words($n);  # N "lorem" words, space separated
     $generator = fake_words( fake_int(1, 3) ); # random number of them
 
-Returns a generator that provides space-separated L<Text::Lorem> words.
-The argument is the number of words to return (or a code reference to
-provide the number of words); the default is one.
+Returns a generator that provides space-separated L<Text::Lorem> words as a
+single scalar value.  The argument is the number of words to return (or a
+code reference to provide the number of words); the default is one.
 
 =cut
 
@@ -36,7 +36,7 @@ sub fake_words {
     $count = 1 unless defined $count;
     require Text::Lorem;
     $LOREM ||= Text::Lorem->new;
-    return sub { $LOREM->words( _transform($count) ) };
+    return sub { scalar $LOREM->words( _transform($count) ) };
 }
 
 =func fake_sentences
@@ -45,9 +45,9 @@ sub fake_words {
     $generator = fake_sentences($n);  # N sentences
     $generator = fake_sentences( fake_int(1, 3) ); # random number of them
 
-Returns a generator that provides L<Text::Lorem> sentences.  The argument
-is the number of sentences to return (or a code reference to provide the
-number of sentences); the default is one.
+Returns a generator that provides L<Text::Lorem> sentences as a single
+scalar value.  The argument is the number of sentences to return (or a code
+reference to provide the number of sentences); the default is one.
 
 =cut
 
@@ -58,7 +58,7 @@ sub fake_sentences {
       if $count == 0;
     require Text::Lorem;
     $LOREM ||= Text::Lorem->new;
-    return sub { $LOREM->sentences( _transform($count) ) };
+    return sub { scalar $LOREM->sentences( _transform($count) ) };
 }
 
 =func fake_paragraphs
@@ -67,9 +67,9 @@ sub fake_sentences {
     $generator = fake_paragraphs($n);  # N paragraph
     $generator = fake_paragraphs( fake_int(1, 3) ); # random number of them
 
-Returns a generator that provides L<Text::Lorem> paragraphs.  The argument
-is the number of paragraphs to return (or a code reference to provide the
-number of paragraphs); the default is one.
+Returns a generator that provides L<Text::Lorem> paragraphs as a single
+scalar value.  The argument is the number of paragraphs to return (or a
+code reference to provide the number of paragraphs); the default is one.
 
 =cut
 
@@ -78,7 +78,7 @@ sub fake_paragraphs {
     $count = 1 unless defined $count;
     require Text::Lorem;
     $LOREM ||= Text::Lorem->new;
-    return sub { $LOREM->paragraphs( _transform($count) ) };
+    return sub { scalar $LOREM->paragraphs( _transform($count) ) };
 }
 
 1;

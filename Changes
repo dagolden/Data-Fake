@@ -2,6 +2,12 @@ Revision history for Data-Fake
 
 {{$NEXT}}
 
+    [FIXED]
+
+    - Text generators like fake_words() are now guaranteed to return a scalar.
+      They did originally, but Text::Lorem 0.32 broke its API and started
+      returning lists in list context.
+
 0.005     2020-10-01 16:59:05-04:00 America/New_York
 
     [FIXED]
