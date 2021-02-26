@@ -5,7 +5,7 @@ use warnings;
 package Data::Fake::Company;
 # ABSTRACT: Fake company and job data generators
 
-our $VERSION = '0.006';
+our $VERSION = '0.007';
 
 use Exporter 5.57 qw/import/;
 

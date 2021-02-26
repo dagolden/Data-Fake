@@ -2,6 +2,8 @@ Revision history for Data-Fake
 
 {{$NEXT}}
 
+0.006     2021-02-25 20:40:16-05:00 America/New_York
+
     [FIXED]
 
     - Text generators like fake_words() are now guaranteed to return a scalar.
